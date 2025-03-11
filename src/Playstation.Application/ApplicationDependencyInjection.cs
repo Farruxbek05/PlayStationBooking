@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Playstation.Application.Common;
 using Playstation.Application.Helpers.GenerateJwt;
+using Playstation.Application.Helpers.PasswordHashers;
 using Playstation.Application.MappingProfiles;
 using Playstation.Application.Services;
 using Playstation.Application.Services.Impl;
@@ -10,7 +12,7 @@ namespace Playstation.Application
 {
     public static class ApplicationDependencyInjection
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services, IWebHostEviroment env, IConfiguration configuration)
+        public static IServiceCollection AddApplication(this IServiceCollection services, IWebHostEnvironment env, IConfiguration configuration)
         {
             services.AddServices(env);
 
@@ -35,15 +37,15 @@ namespace Playstation.Application
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IPlayStationRoomGameService, PlayStationRoomGameService>();
-
-
-          
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IJwtTokenHandler, JwtTokenHandler>();
         }
+
         private static void RegisterAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(IMappingProfilesMarker));
         }
-
 
         private static void RegisterCashing(this IServiceCollection services)
         {

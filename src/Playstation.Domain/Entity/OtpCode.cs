@@ -11,7 +11,7 @@ public class OtpCode : BaseEntity
     public string Code { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; } = DateTimeOffset.Now;
     public OtpCodeStatus Status { get; set; }
-
+    public int Attempts { get; set; } = 0;
     public Guid UserId { get; }
     public User User { get; }
 }

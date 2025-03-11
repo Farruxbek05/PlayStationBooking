@@ -47,7 +47,7 @@ public class CreateUserModelValidator : AbstractValidator<CreateUserModel>
 
     private bool PhoneNumberIsUnique(string phoneNumber)
     {
-        bool phoneNumberExist = _dbContext.Users.Any(u => u.Email == phoneNumber);
+        bool phoneNumberExist = _dbContext.Users.Any(u => u.PhoneNumber == phoneNumber);
         return !phoneNumberExist;
     }
 

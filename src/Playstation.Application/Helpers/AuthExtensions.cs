@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Playstation.Application.Helpers.GenerateJwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace Playstation.Application.Helpers
@@ -31,7 +34,7 @@ namespace Playstation.Application.Helpers
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authOptions.SecretKey))
                     };
                 });
-                 
+
             serviceCollection.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdminRole", policy =>

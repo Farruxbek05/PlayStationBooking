@@ -217,16 +217,25 @@ public class UserService : IUserService
             return ApiResult<bool>.Failure(new List<string> { "User not found" });
         }
 
-        var lastOtp = user.OtpCodes
-            .Where(otp => otp.Status == OtpCodeStatus.Unverified)
-            .OrderByDescending(otp => otp.CreatedAt)
-            .FirstOrDefault();
+        var unverifiedOtps = user.OtpCodes.Where(otp => otp.Status == OtpCodeStatus.Unverified);
+
+        foreach (var otp in unverifiedOtps)
+        {
+            if (IsExpired(otp.CreatedAt))
+            {
+                otp.Status = OtpCodeStatus.Expired;
+            }
+        }
+        await _dbContext.SaveChangesAsync();
+
+        var lastOtp = unverifiedOtps.OrderByDescending(otp => otp.CreatedAt).FirstOrDefault();
 
         if (lastOtp == null)
         {
             return ApiResult<bool>.Failure(new List<string> { "No active OTP found" });
         }
 
+  
         if (IsExpired(lastOtp.CreatedAt))
         {
             lastOtp.Status = OtpCodeStatus.Expired;
@@ -234,8 +243,19 @@ public class UserService : IUserService
             return ApiResult<bool>.Failure(new List<string> { "OTP has expired" });
         }
 
+        const int maxAttempts = 5;
+
+        if (lastOtp.Attempts >= maxAttempts)
+        {
+            lastOtp.Status = OtpCodeStatus.Expired;
+            await _dbContext.SaveChangesAsync();
+            return ApiResult<bool>.Failure(new List<string> { "OTP has expired due to multiple failed attempts" });
+        }
+
         if (lastOtp.Code != code)
         {
+            lastOtp.Attempts++;
+            await _dbContext.SaveChangesAsync();
             return ApiResult<bool>.Failure(new List<string> { "Invalid OTP code" });
         }
 
@@ -244,6 +264,8 @@ public class UserService : IUserService
 
         return ApiResult<bool>.Success(true);
     }
+
+
 
     public async Task<ApiResult<LoginResponseModel>> LoginAsync(LoginUserModel loginModel)
     {

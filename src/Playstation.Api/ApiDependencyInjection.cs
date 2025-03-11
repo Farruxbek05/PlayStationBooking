@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Playstation.Application.Helpers.GenerateJwt;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace Playstation.Api;
@@ -32,8 +33,6 @@ public static class ApiDependencyInjection
             });
     }
 
-
-
     public static void AddSwagger(this IServiceCollection services)
     {
         services.AddSwaggerGen(s =>
@@ -48,19 +47,20 @@ public static class ApiDependencyInjection
             });
 
             s.AddSecurityRequirement(new OpenApiSecurityRequirement
-        {
             {
-                new OpenApiSecurityScheme
                 {
-                    Reference = new OpenApiReference
+                    new OpenApiSecurityScheme
                     {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                Array.Empty<string>()
-            }
-        });
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
         });
     }
 }
+

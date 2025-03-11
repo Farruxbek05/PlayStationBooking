@@ -12,7 +12,7 @@ namespace Playstation.Domain.Entity
         public string FullName { get; set; } = null!;
         public string Lastname { get; set; } = null!;
         public string Firstname { get; set; } = null!;
-        public string Salt { get; set; }
+        public string Salt { get; set; }=null!;
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpireDate { get; set; }
         public string? CreatedBy { get; set; }

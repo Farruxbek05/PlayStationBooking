@@ -9,8 +9,8 @@ public class EmailService : IEmailService
     {
         try
         {
-            var bussinessMail = "farrux05@gmail.com";
-            var pass = "jdeqwhhlggnbavgl";
+            var bussinessMail = "marufjonovfarruxbek846@gmail.com";
+            var pass = "hhccvjtpvmotcacr";
             var client = new SmtpClient("smtp.gmail.com", 587)
             {
                 EnableSsl = true,
@@ -22,7 +22,7 @@ public class EmailService : IEmailService
                 From = new MailAddress(bussinessMail),
                 Subject = "Verification Code",
                 Body = $"Dear {email}," +
-                       "\nYou are using this email address to register on our website." +
+                       "\nYou are using this email address to register on PlaystationBooking." +
                        $"\n\nYour verification code is {otp}." +
                        "\nPlease use it to complete your registration before it expires." +
                        "\n\nIf you didn't request this, please ignore this email." +

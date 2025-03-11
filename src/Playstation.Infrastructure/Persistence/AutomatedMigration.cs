@@ -13,4 +13,5 @@ namespace Playstation.Infrastructure.Persistence
                 await context.Database.MigrateAsync();
         }
     }
+
 }
